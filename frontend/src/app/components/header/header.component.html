@@ -1,5 +1,5 @@
 <!-- HEADER -->
-<header class="bg-primary text-white shadow-sm">
+<header class="bg-primary text-white shadow-sm sticky-top" id="mainHeader">
   <!-- Top Bar -->
   <div class="container-fluid py-3">
     <div class="row align-items-center g-3">
@@ -69,7 +69,6 @@
       </button>
     </ng-container>
 
-
         <!-- Login/Register -->
         <ng-template #loginOptions>
           <a routerLink="/login" class="btn btn-outline-light btn-sm shadow-sm">Log In</a>
@@ -80,9 +79,9 @@
   </div>
 
   <!-- Category Menu -->
-  <nav class="bg-dark py-2 category-nav" *ngIf="authService.isLoggedIn">
+  <nav class="bg-dark py-2 category-nav" *ngIf="authService.isLoggedIn" style="position: sticky; top: 56px; z-index: 1040;">
     <div class="container-fluid d-flex flex-wrap justify-content-center gap-3">
-      <a *ngFor="let category of categoryList"
+      <a *ngFor="let category of categoryList" [ngClass]="{'active-category': activeCategoryId === category._id}"
          class="text-white px-3 py-1 text-decoration-none category-link"
          (click)="searchCategory(category._id!)">
          {{ category.name }}

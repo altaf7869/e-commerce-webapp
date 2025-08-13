@@ -2,13 +2,14 @@ import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-register',
-  imports: [CommonModule,ReactiveFormsModule],
+  imports: [CommonModule,ReactiveFormsModule, RouterModule ],
   templateUrl: './register.component.html',
-  styleUrl: './register.component.css'
+  styleUrls: ['./register.component.css']
 })
 export class RegisterComponent {
   formBuilder = inject(FormBuilder);
@@ -18,13 +19,15 @@ export class RegisterComponent {
     password: ['', [Validators.minLength(5)]]
   })
 
-authService = inject(AuthService);
-router = inject(Router);
+  toastr = inject(ToastrService)
+  authService = inject(AuthService);
+  router = inject(Router);
 
   register(){
     let value = this.registerForm.value;
     this.authService.register(value.name!, value.email!, value.password!).subscribe(result => {
-      alert("User Registered.");
+     // alert("User Registered.");
+       this.toastr.success('User Registered.', 'Success');
       this.router.navigateByUrl('/login');
     })
   }

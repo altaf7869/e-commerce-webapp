@@ -1,17 +1,22 @@
 <div id="homeCarousel" class="carousel slide mb-5" data-bs-ride="carousel" *ngIf="chunkedImages.length > 0">
   <div class="carousel-inner rounded shadow-sm overflow-hidden">
-    <div class="carousel-item" *ngFor="let group of chunkedImages; let i = index" [ngClass]="{ 'active': i === 0 }">
-      <div class="row">
+    <div class="carousel-item" *ngFor="let group of chunkedImages; let i = index" [class.active]="i === 0">
+      <div class="row g-3">
         <div class="col-12 col-sm-6 col-md-4" *ngFor="let banner of group">
-            <div class="position-relative d-flex flex-column align-items-center" [routerLink]="'product/'+banner._id">
-            <img [src]="banner.images[0]" class="d-block w-100 img-fluid" [alt]="banner.name || 'Banner'">
-            <span>{{banner.name}}</span>
+          <div class="product-card" [routerLink]="'/product/' + banner._id">
+            <div class="product-image-wrapper">
+              <img [src]="banner.images[0]" [alt]="banner.name || 'Banner'" class="product-image">
             </div>
+            <div class="product-name">
+              {{ banner.name }}
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
+  <!-- Controls -->
   <button class="carousel-control-prev" type="button" data-bs-target="#homeCarousel" data-bs-slide="prev">
     <span class="carousel-control-prev-icon"></span>
   </button>
@@ -19,7 +24,6 @@
     <span class="carousel-control-next-icon"></span>
   </button>
 </div>
-
 
 
 <div class="container py-4">

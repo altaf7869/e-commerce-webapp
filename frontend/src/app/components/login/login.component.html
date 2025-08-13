@@ -1,26 +1,56 @@
-<div class="container mt-5">
-  <div class="row justify-content-center">
-    <div class="col-md-6 col-lg-5">
-      <div class="card shadow-lg rounded">
-        <div class="card-body">
-          <h3 class="text-center mb-4">Login</h3>
-          <form [formGroup]="loginForm">
-           
-            <div class="mb-3">
-              <label for="email" class="form-label">Email address</label>
-              <input type="email" class="form-control" id="email" placeholder="Enter your email" formControlName="email" required>
+<div class="container-fluid min-vh-100 d-flex align-items-center justify-content-center bg-light" 
+     style="background: linear-gradient(135deg, #f0f4ff, #d9e4ff);">
+  <div class="row w-100 justify-content-center">
+    <div class="col-md-6 col-lg-4">
+      <div class="card shadow-lg rounded-4 overflow-hidden border-0">
+        
+        <!-- Header with gradient -->
+        <div class="text-center py-4" style="background: linear-gradient(90deg, #0d6efd, #6610f2); color: #fff;">
+          <h2 class="mb-1 fw-bold">Welcome Back</h2>
+          <small>Login to your account</small>
+        </div>
+
+        <div class="card-body p-4">
+          <form [formGroup]="loginForm" novalidate>
+
+            <!-- Email -->
+            <div class="mb-3 position-relative">
+              <label for="email" class="form-label fw-semibold">Email Address</label>
+              <div class="input-group shadow-sm rounded-pill overflow-hidden">
+                <span class="input-group-text bg-white border-0 ps-3">
+                  <i class="bi bi-envelope text-muted"></i>
+                </span>
+                <input type="email" class="form-control border-0" id="email" placeholder="example@mail.com" formControlName="email" required>
+              </div>
             </div>
 
-            <div class="mb-4">
-              <label for="password" class="form-label">Password</label>
-              <input type="password" class="form-control" id="password" formControlName="password" placeholder="Enter your password" required>
+            <!-- Password -->
+            <div class="mb-4 position-relative">
+              <label for="password" class="form-label fw-semibold">Password</label>
+              <div class="input-group shadow-sm rounded-pill overflow-hidden">
+                <span class="input-group-text bg-white border-0 ps-3">
+                  <i class="bi bi-lock text-muted"></i>
+                </span>
+                <input type="password" class="form-control border-0" id="password" placeholder="Enter your password" formControlName="password" required>
+              </div>
             </div>
 
-            <button type="submit" class="btn btn-primary w-100"
-            [disabled]="loginForm.invalid" (click)="login()">Register</button>
+            <!-- Login Button -->
+            <button type="submit" class="btn btn-primary w-100 rounded-pill py-2 fw-bold shadow-sm"
+              [disabled]="loginForm.invalid" (click)="login()">
+              Login
+            </button>
+
+            <!-- Optional: Register link -->
+            <p class="text-center mt-3 mb-0">
+              Don't have an account? 
+              <a routerLink="/register" class="text-primary fw-semibold text-decoration-none">Register</a>
+            </p>
+
           </form>
         </div>
       </div>
     </div>
   </div>
 </div>
+

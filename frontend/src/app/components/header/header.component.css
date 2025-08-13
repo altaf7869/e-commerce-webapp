@@ -1,3 +1,5 @@
+
+
 .category-link {
   position: relative;
   transition: color 0.3s ease;
@@ -21,4 +23,9 @@
 
 .category-link:hover::after {
   width: 80%;
+}
+/* Scale effect for category links */
+.hover-scale:hover {
+  transform: scale(1.05);
+  transition: transform 0.2s ease-in-out;
 }

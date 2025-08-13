@@ -57,6 +57,7 @@ ngOnInit(){
 
   this.id=this.route.snapshot.params["id"];
   if(this.id){
+    this.isEdit = true;
     this.productService.getProductById(this.id).subscribe(result => {
       for(let index = 0; index < result.images.length; index++){
         this.addImage();

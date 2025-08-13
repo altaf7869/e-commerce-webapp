@@ -20,8 +20,10 @@ export class HeaderComponent {
   router = inject(Router);
 
   searchTerm: string = '';
+  activeCategoryId: string | null = null;
 
   ngOnInit() {
+   
     this.customerService.getCategories().subscribe(result => {
       this.categoryList = result;
       console.log(this.categoryList);
@@ -37,6 +39,7 @@ export class HeaderComponent {
   }
 
   searchCategory(id: string) {
+      this.activeCategoryId = id; 
     this.searchTerm = '';
     this.router.navigate(['/products'], {
       queryParams: { categoryId: id }
