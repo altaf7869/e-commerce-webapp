@@ -1,0 +1,150 @@
+<div class="container py-5">
+  
+  <!-- Step Progress Bar -->
+  <div class="checkout-steps mb-5">
+    <div class="step" [class.active]="orderStep >= 0">
+      <span class="step-number">1</span>
+      <span class="step-label">Cart</span>
+    </div>
+    <div class="step-line"></div>
+    <div class="step" [class.active]="orderStep >= 1">
+      <span class="step-number">2</span>
+      <span class="step-label">Address</span>
+    </div>
+    <div class="step-line"></div>
+    <div class="step" [class.active]="orderStep >= 2">
+      <span class="step-number">3</span>
+      <span class="step-label">Payment</span>
+    </div>
+  </div>
+
+  <!-- CART STEP -->
+  @if(orderStep==0){
+    <h3 class="mb-4 text-center fw-bold">🛒 Your Shopping Cart</h3>
+    <div class="row g-4">
+      <!-- Cart Table -->
+      <div class="col-lg-8">
+        <div class="card shadow-lg border-0 rounded-3">
+          <div class="card-body p-4">
+            <div class="table-responsive">
+              <table class="table align-middle">
+                <thead class="table-dark">
+                  <tr>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Discount</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for(item of cartItems; track $index) {
+                    <tr>
+                      <td>
+                        <div class="d-flex align-items-center">
+                          <img [src]="item.product.images[0]" class="cart-img me-3" alt="Product">
+                          <div>
+                            <h6 class="mb-0">{{ item.product.name }}</h6>
+                            <small class="text-muted">{{ item.product.categoryId }}</small>
+                          </div>
+                        </div>
+                      </td>
+                      <td>₹{{ item.product.price }}</td>
+                      <td>
+                        <span class="badge bg-success">{{ item.product.discount }}% OFF</span>
+                      </td>
+                      <td>
+                        <button class="btn btn-sm btn-outline-secondary me-1" (click)="addToCart(item.product._id!,-1)">-</button>
+                        <span class="fw-bold">{{ item.quantity }}</span>
+                        <button class="btn btn-sm btn-outline-secondary ms-1" (click)="addToCart(item.product._id!,1)">+</button>
+                      </td>
+                      <td class="fw-bold text-success">₹{{ sellingPrice(item.product) * item.quantity }}</td>
+                      <td>
+                        <button class="btn btn-sm btn-outline-danger">
+                          <i class="bi bi-trash"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Summary -->
+      <div class="col-lg-4">
+        <div class="card shadow-lg border-0 rounded-3 p-4">
+          <h5 class="fw-bold mb-3">Order Summary</h5>
+          <div class="d-flex justify-content-between mb-2">
+            <span>Subtotal</span>
+            <strong>₹{{ totalAmount }}</strong>
+          </div>
+          <hr>
+          <div class="d-flex justify-content-between fs-5 fw-bold text-success">
+            <span>Total</span>
+            <span>₹{{ totalAmount }}</span>
+          </div>
+          <button class="btn btn-primary w-100 mt-4 btn-lg" (click)="checkout()">
+            Proceed to Checkout
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- ADDRESS STEP -->
+  @else if(orderStep==1){
+    <h2 class="text-center fw-bold mb-4">📍 Your Shipping Address</h2>
+    <div class="card shadow-lg border-0 rounded-3 p-4 mx-auto" style="max-width: 600px;">
+      <form [formGroup]="addressForm">
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Address 1</label>
+          <input type="text" class="form-control" formControlName="address1" placeholder="Street, Area, Locality">
+        </div>
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Address 2</label>
+          <input type="text" class="form-control" formControlName="address2" placeholder="Landmark (Optional)">
+        </div>
+        <div class="mb-3">
+          <label class="form-label fw-semibold">City</label>
+          <input type="text" class="form-control" formControlName="city" placeholder="Enter your city">
+        </div>
+        <div class="mb-4">
+          <label class="form-label fw-semibold">PinCode</label>
+          <input type="number" class="form-control" formControlName="pincode" placeholder="6-digit Pincode">
+        </div>
+        <div class="d-flex gap-3">
+          <button class="btn btn-secondary w-50" (click)="orderStep=0">Back</button>
+          <button type="submit" class="btn btn-primary w-50" (click)="addAddress()">Continue</button>
+        </div>
+      </form>
+    </div>
+  }
+
+  <!-- PAYMENT STEP -->
+  @else if(orderStep==2){
+    <h2 class="text-center fw-bold mb-4">💳 Select Payment Method</h2>
+    <div class="card shadow-lg border-0 rounded-3 p-4 mx-auto" style="max-width: 500px;">
+      <div class="form-check mb-3">
+        <input class="form-check-input" type="radio" name="paymentMethod" id="cash" value="cash" [(ngModel)]="paymentType" checked>
+        <label class="form-check-label" for="cash">Cash on Delivery</label>
+      </div>
+      <div class="form-check mb-3">
+        <input class="form-check-input" type="radio" name="paymentMethod" id="card" value="card" [(ngModel)]="paymentType">
+        <label class="form-check-label" for="card">Credit/Debit Card</label>
+      </div>
+      <div class="form-check mb-4">
+        <input class="form-check-input" type="radio" name="paymentMethod" id="upi" value="upi" [(ngModel)]="paymentType">
+        <label class="form-check-label" for="upi">UPI (Google Pay / PhonePe / Paytm)</label>
+      </div>
+      <div class="d-flex gap-3">
+        <button class="btn btn-secondary w-50" (click)="orderStep=1">Back</button>
+        <button class="btn btn-primary w-50" (click)="completeOrder()">Continue</button>
+      </div>
+    </div>
+  }
+
+</div>

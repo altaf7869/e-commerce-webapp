@@ -1,0 +1,64 @@
+<div class="container my-4">
+  @for(order of orders; track $index) {
+    <div class="card shadow-sm mb-4">
+      <div class="card-header bg-primary text-white">
+        <div class="d-flex justify-content-between">
+          <span>OrderID:  {{order._id}}</span>
+          <small>{{ order.date | date: 'medium' }}</small>
+        </div>
+      </div>
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+              <tr>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Discount</th>
+                <th>Quantity</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for(item of order.items; track $index) {
+                <tr>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <img [src]="item.product.images[0]" class="cart-img me-3" style="width: 60px; height: 60px; object-fit: cover;" alt="Product">
+                      <div>
+                        <h6 class="mb-0">{{ item.product.name }}</h6>
+                        <small class="text-muted">Category: {{ item.product.categoryId }}</small>
+                      </div>
+                    </div>
+                  </td>
+                  <td>₹{{ item.product.price }}</td>
+                  <td>
+                    <span class="badge bg-success">{{ item.product.discount }}% OFF</span>
+                  </td>
+                  <td>{{ item.quantity }}</td>
+                  <td class="fw-bold text-success">
+                    ₹{{ sellingPrice(item.product) * item.quantity }}
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Grand Total for this Order -->
+      <div class="card-footer d-flex justify-content-between align-items-center py-2" style="background-color: #f8f9fa;">
+  <span class="fw-semibold">
+    <i class="bi bi-info-circle text-primary me-1"></i>
+    Status: <span class="text-capitalize text-dark">{{ order.status }}</span>
+  </span>
+  
+  <span class="fw-bold">
+    <i class="bi bi-cash-stack text-success me-1"></i>
+    Grand Total: <span class="text-success">₹{{ getOrderTotal(order) }}</span>
+  </span>
+</div>
+
+    </div>
+  }
+</div>

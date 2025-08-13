@@ -1,0 +1,45 @@
+<div id="homeCarousel" class="carousel slide mb-5" data-bs-ride="carousel" *ngIf="chunkedImages.length > 0">
+  <div class="carousel-inner rounded shadow-sm overflow-hidden">
+    <div class="carousel-item" *ngFor="let group of chunkedImages; let i = index" [ngClass]="{ 'active': i === 0 }">
+      <div class="row">
+        <div class="col-12 col-sm-6 col-md-4" *ngFor="let banner of group">
+            <div class="position-relative d-flex flex-column align-items-center" [routerLink]="'product/'+banner._id">
+            <img [src]="banner.images[0]" class="d-block w-100 img-fluid" [alt]="banner.name || 'Banner'">
+            <span>{{banner.name}}</span>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <button class="carousel-control-prev" type="button" data-bs-target="#homeCarousel" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon"></span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#homeCarousel" data-bs-slide="next">
+    <span class="carousel-control-next-icon"></span>
+  </button>
+</div>
+
+
+
+<div class="container py-4">
+
+   <!-- New Arrivals -->
+  <h3 class="my-4 fw-semibold">New Arrivals</h3>
+  <div class="row g-4">
+    <div class="col-6 col-md-4 col-lg-3" *ngFor="let product of newProducts">
+      <app-product-card [product]="product" priceColor="text-primary"></app-product-card>
+    </div>
+  </div>
+  
+  <!-- Featured Products -->
+  <h3 class="mb-3 mt-5 fw-semibold">Featured Products</h3>
+  <div class="row g-4">
+    <div class="col-6 col-md-4 col-lg-3" *ngFor="let product of featuredProducts">
+      <app-product-card [product]="product" priceColor="text-success"></app-product-card>
+    </div>
+  </div>
+
+ 
+
+</div>

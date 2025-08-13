@@ -1,0 +1,81 @@
+<div class="card card-product h-100 border-0 shadow-sm rounded-3 overflow-hidden hover-shadow transition">
+  
+  <!-- Product Image -->
+  <div class="position-relative bg-light" style="height: 230px;">
+    <a [routerLink]="'/product/' + product._id" class="d-block h-100">
+      <img 
+        [src]="product.images[0]" 
+        class="w-100 h-100" 
+        alt="{{ product.name }}"
+        style="object-fit: cover; transition: transform 0.3s ease;"
+        (mouseenter)="hover = true" 
+        (mouseleave)="hover = false"
+        [style.transform]="hover ? 'scale(1.05)' : 'scale(1)'">
+    </a>
+
+    <!-- Discount Badge -->
+    <span *ngIf="product.discount" 
+      class="badge bg-danger position-absolute top-0 start-0 m-2 px-2 py-1 rounded-pill shadow-sm small">
+      {{ product.discount }}% OFF
+    </span>
+  </div>
+
+  <!-- Card Body -->
+  <div class="card-body d-flex flex-column p-3">
+    
+    <!-- Product Name -->
+    <h6 class="card-title fw-semibold text-truncate mb-1" 
+        title="{{ product.name }}">
+      {{ product.name }}
+    </h6>
+
+    <!-- Short Description -->
+    <p class="mb-2 text-muted small text-truncate" 
+       title="{{ product.shortDescription }}">
+      {{ product.shortDescription }}
+    </p>
+
+    <!-- Price Section -->
+    <div class="mb-3">
+      <span class="fw-bold text-success fs-6">
+        ₹{{ (product.price - (product.price * product.discount / 100)).toFixed(2) }}
+      </span>
+      <small class="text-decoration-line-through text-muted ms-2">
+        ₹{{ product.price }}
+      </small>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="d-flex flex-wrap gap-2 mt-auto">
+      
+      <!-- Add to Cart -->
+      <button 
+        class="btn btn-sm btn-primary flex-fill d-flex align-items-center justify-content-center"
+        (click)="addToCart(product)">
+        @if (!isProductInCart(product._id!)) {
+          <i class="bi bi-cart-plus me-1"></i> Add
+        } @else {
+          <i class="bi bi-cart-dash me-1"></i> Remove
+        }
+      </button>
+
+      <!-- Wishlist -->
+      <button 
+        class="btn btn-sm btn-outline-danger d-flex align-items-center justify-content-center"
+        (click)="addToWishlist(product)">
+        @if (isInWishlist(product)) {
+          <i class="bi bi-heart-fill"></i>
+        } @else {
+          <i class="bi bi-heart"></i>
+        }
+      </button>
+
+      <!-- Delete -->
+      <button 
+        class="btn btn-sm btn-outline-secondary d-flex align-items-center justify-content-center">
+        <i class="bi bi-trash"></i>
+      </button>
+
+    </div>
+  </div>
+</div>

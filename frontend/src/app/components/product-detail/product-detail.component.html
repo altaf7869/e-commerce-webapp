@@ -1,0 +1,121 @@
+<div class="container my-5">
+
+  <!-- Product Detail Section -->
+  <div class="row g-5">
+
+    <!-- Product Image Gallery -->
+    <div class="col-lg-6">
+      <div class="border rounded p-3 bg-light shadow-sm">
+        
+        <!-- Main Image -->
+        <div class="mb-3 text-center">
+          <img [src]="mainImage" 
+               class="img-fluid rounded shadow-sm product-main-img"
+               alt="Product"
+               style="object-fit: contain; max-height: 450px;">
+        </div>
+
+        <!-- Thumbnails -->
+        <div class="d-flex flex-wrap gap-2 justify-content-center">
+          @for(url of product.images; track $index) {
+            <img [src]="url" 
+                 class="img-thumbnail border product-thumb"
+                 (click)="changeImage(url)" 
+                 [class.active-thumb]="mainImage === url"
+                 style="cursor: pointer;">
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Product Info -->
+    <div class="col-lg-6">
+      <div class="p-3">
+
+        <!-- Title -->
+        <h2 class="fw-bold mb-3">{{ product.name }}</h2>
+
+        <!-- Price & Discount -->
+        <div class="mb-3">
+          <h4 class="text-success d-inline me-3">
+            ₹{{ product.price - (product.price * product.discount / 100) | number:'1.0-0' }}
+          </h4>
+          <span class="text-muted text-decoration-line-through">
+            ₹{{ product.price }}
+          </span>
+          <span class="badge bg-danger ms-2">
+            {{ product.discount }}% OFF
+          </span>
+        </div>
+
+        <!-- Short Description -->
+        <p class="text-muted mb-4">{{ product.shortDescription }}</p>
+
+        <!-- Action Buttons -->
+        <div class="d-flex flex-wrap gap-3 mb-4">
+          
+          <!-- Wishlist Button -->
+          <button class="btn btn-outline-danger d-flex align-items-center gap-2" (click)="addToWishlist(product)">
+            @if(isInWishlist(product)){
+              <i class="bi bi-heart-fill"></i> Remove from Wishlist
+            } @else {
+              <i class="bi bi-heart"></i> Add to Wishlist
+            }
+          </button>
+
+          <!-- Cart Button -->
+          @if(isProductInCart(product._id!)){
+            <button class="btn btn-danger d-flex align-items-center gap-2" (click)="addToCart(product)">
+              <i class="bi bi-cart-dash"></i> Remove from Cart
+            </button>
+          } @else {
+            <button class="btn btn-primary d-flex align-items-center gap-2" (click)="addToCart(product)">
+              <i class="bi bi-cart-plus"></i> Add to Cart
+            </button>
+          }
+
+          <!-- Buy Now -->
+          <button class="btn btn-warning text-dark fw-bold d-flex align-items-center gap-2">
+            <i class="bi bi-lightning-charge"></i> Buy Now
+          </button>
+        </div>
+
+        <!-- Stock / Shipping Info -->
+        <p class="text-muted small">
+          ✅ Inclusive of all taxes | 🚚 Free delivery available
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Product Description -->
+  <div class="row mt-5">
+    <div class="col-12">
+      <h4 class="mb-3 fw-bold">Product Details</h4>
+      <div class="border rounded p-3 bg-white shadow-sm">
+        <table class="table table-bordered mb-0">
+          <tbody>
+            <tr>
+              <th class="w-25 bg-light">Description</th>
+              <td>{{ product.description }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Similar Products -->
+    @if(similarProducts.length){
+      <div class="mt-5">
+        <h4 class="fw-bold mb-3">Similar Products</h4>
+        <div class="row g-3">
+          @for(similar of similarProducts; track $index) {
+            <div class="col-md-3 col-6">
+              <app-product-card [product]="similar"></app-product-card>
+            </div>
+          }
+        </div>
+      </div>
+    }
+  </div>
+</div>

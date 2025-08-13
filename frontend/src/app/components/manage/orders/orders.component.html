@@ -1,0 +1,100 @@
+<div class="container my-4">
+  <h3 class="mb-4 fw-bold text-primary">📦 Manage Orders</h3>
+
+  @for (order of orders; track $index) {
+    <div class="card shadow-sm border-0 mb-4 rounded-3 overflow-hidden">
+
+      <div class="row g-0">
+        
+        <!-- Left Panel: Order Info -->
+        <div class="col-md-4 bg-light p-3 border-end">
+          <h6 class="fw-bold text-secondary mb-2">🆔 Order Details</h6>
+          <p class="mb-1"><strong>ID:</strong> <span class="text-muted">{{ order._id }}</span></p>
+          <p class="mb-1"><strong>Date:</strong> {{ order.date | date: 'medium' }}</p>
+          <p class="mb-1"><strong>Status:</strong>
+            <span class="badge bg-info text-dark text-capitalize">{{ order.status }}</span>
+          </p>
+          <hr>
+          <h6 class="fw-bold text-secondary mb-2">📍 Shipping Address</h6>
+          <p class="small mb-0">
+            {{ order.address.address1 }}<br>
+            {{ order.address.address2 }}<br>
+            {{ order.address.city }} - {{ order.address.pincode }}
+          </p>
+        </div>
+
+        <!-- Right Panel: Products Table -->
+        <div class="col-md-8 p-3">
+          <h6 class="fw-bold text-secondary mb-3">🛒 Ordered Items</h6>
+          <div class="table-responsive">
+            <table class="table table-sm table-striped table-hover align-middle mb-0">
+              <thead class="table-light">
+                <tr>
+                  <th>Product</th>
+                  <th class="text-center">Price</th>
+                  <th class="text-center">Discount</th>
+                  <th class="text-center">Qty</th>
+                  <th class="text-center">Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (item of order.items; track $index) {
+                  <tr>
+                    <td>
+                      <div class="d-flex align-items-center">
+                        <img
+                          [src]="item.product.images[0]"
+                          class="rounded border me-2"
+                          style="width: 50px; height: 50px; object-fit: cover;"
+                          alt="Product"
+                        >
+                        <div>
+                          <h6 class="mb-0">{{ item.product.name }}</h6>
+                          <small class="text-muted">
+                            Category: {{ item.product.categoryId }}
+                          </small>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="text-center">₹{{ item.product.price }}</td>
+                    <td class="text-center">
+                      <span class="badge bg-success">{{ item.product.discount }}% OFF</span>
+                    </td>
+                    <td class="text-center">{{ item.quantity }}</td>
+                    <td class="fw-bold text-success text-center">
+                      ₹{{ sellingPrice(item.product) * item.quantity }}
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Footer: Status Update & Total -->
+      <div class="card-footer bg-white d-flex flex-wrap justify-content-between align-items-center p-3">
+        <div>
+          <label for="statusSelect-{{ order._id }}" class="fw-bold me-2">Update Status:</label>
+          <select
+            id="statusSelect-{{ order._id }}"
+            class="form-select form-select-sm d-inline-block"
+            style="min-width: 160px;"
+            [value]="order.status"
+            (change)="statusChange($event, order)"
+          >
+            <option value="inprogress">In Progress</option>
+            <option value="shipped">Shipped</option>
+            <option value="delivered">Delivered</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
+        </div>
+        <div class="fw-bold fs-6">
+         Grand Total: ₹{{ getOrderTotal(order) }}
+        </div>
+      </div>
+
+    </div>
+  }
+</div>

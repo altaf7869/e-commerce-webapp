@@ -1,0 +1,92 @@
+<!-- HEADER -->
+<header class="bg-primary text-white shadow-sm">
+  <!-- Top Bar -->
+  <div class="container-fluid py-3">
+    <div class="row align-items-center g-3">
+      
+      <!-- Logo -->
+      <div class="col-lg-3 col-md-4 col-6">
+        <a routerLink="/" class="text-white fs-3 fw-bold text-decoration-none d-flex align-items-center">
+          <i class="bi bi-shop me-2"></i> My Store
+        </a>
+      </div>
+
+      <!-- Search -->
+      <div class="col-lg-5 col-md-6 col-12">
+        <div class="input-group shadow-sm">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Search for products..."
+            [(ngModel)]="searchTerm"
+            (keyup.enter)="onSearch()"
+          />
+          <button class="btn btn-dark" (click)="onSearch()">
+            <i class="bi bi-search"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- User Actions -->
+      <div class="col-lg-4 col-md-12 text-end d-flex flex-wrap justify-content-end align-items-center gap-2">
+        
+        <!-- Admin/User Profile -->
+        <ng-container *ngIf="authService.isLoggedIn; else loginOptions">
+           <!-- Username link -->
+        <a *ngIf="authService.isAdmin; else normalUser"
+          routerLink="/admin"
+          class="btn btn-outline-light btn-sm position-relative">
+          {{ authService.userName }}
+        </a>
+        <ng-template #normalUser>
+          <a routerLink="/profile"
+            class="btn btn-outline-light btn-sm position-relative">
+            {{ authService.userName }}
+          </a>
+        </ng-template>
+
+      <a routerLink="/wishlist" class="btn btn-outline-light btn-sm position-relative">
+        <i class="bi bi-heart-fill"></i>
+      </a>
+      <a routerLink="/cart" class="btn btn-outline-light btn-sm position-relative">
+        <i class="bi bi-cart"></i>
+      </a>
+
+      <!-- Orders link changes based on role -->
+      <a *ngIf="authService.isAdmin; else customerOrders"
+        routerLink="/admin/orders"
+        class="btn btn-outline-light btn-sm position-relative">
+        Orders
+      </a>
+      <ng-template #customerOrders>
+        <a routerLink="/orders" class="btn btn-outline-light btn-sm position-relative">
+          Orders
+        </a>
+      </ng-template>
+
+      <button (click)="logout()" class="btn btn-danger btn-sm shadow-sm">
+        Logout
+      </button>
+    </ng-container>
+
+
+        <!-- Login/Register -->
+        <ng-template #loginOptions>
+          <a routerLink="/login" class="btn btn-outline-light btn-sm shadow-sm">Log In</a>
+          <a routerLink="/register" class="btn btn-light btn-sm text-primary fw-bold shadow-sm">Register</a>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+
+  <!-- Category Menu -->
+  <nav class="bg-dark py-2 category-nav" *ngIf="authService.isLoggedIn">
+    <div class="container-fluid d-flex flex-wrap justify-content-center gap-3">
+      <a *ngFor="let category of categoryList"
+         class="text-white px-3 py-1 text-decoration-none category-link"
+         (click)="searchCategory(category._id!)">
+         {{ category.name }}
+      </a>
+    </div>
+  </nav>
+</header>
